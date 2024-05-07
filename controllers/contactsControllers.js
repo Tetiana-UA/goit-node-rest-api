@@ -1,6 +1,6 @@
 import contactsService from "../services/contactsServices.js";
 import HttpError from "../helpers/HttpError.js";
-import Joi from "joi";
+
 import {
   createContactSchema,
   updateContactSchema,
@@ -71,5 +71,7 @@ export const updateContact = async (req, res, next) => {
       throw HttpError(404, "Not found");
     }
     res.status(200).json(result);
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
