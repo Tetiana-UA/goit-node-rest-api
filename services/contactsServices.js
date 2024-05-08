@@ -30,22 +30,22 @@ async function getContactById(contactId) {
   return contact;
 }
 
-async function removeContact(contactId) {
+async function removeContact(id) {
   const contacts = await readContacts();
 
-  const index = contacts.findIndex((contact) => contacts.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === id);
 
   if (index === -1) {
     return null;
   }
   const removedContact = contacts[index];
-
+  console.log(removedContact);
   contacts.splice(index, 1);
   await writeContacts(contacts);
   return removedContact;
 }
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const contacts = await readContacts();
   const newContact = { name, email, phone, id: crypto.randomUUID() };
   contacts.push(newContact);
@@ -53,10 +53,10 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-async function updateById(contactId, data) {
+async function updateById(id, data) {
   const contacts = await readContacts();
 
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === id);
 
   if (index === -1) {
     return null;
