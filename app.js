@@ -27,6 +27,9 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(3000, () => {
+//слухаємо порт 3000 або зі змінної з сервера render, куди ми задеплоїдили
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
   console.log("Server is running. Use our API on port: 3000");
 });
