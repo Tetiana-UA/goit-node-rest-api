@@ -16,6 +16,11 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // owner: {
+  //  type: Schema.Types.ObjectId,
+  //  ref: 'user',
+  //}
 });
 
+//створюємо і відразу імпортуємо модель на основі схеми
 export default mongoose.model("Contact", contactSchema);
