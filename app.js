@@ -28,8 +28,8 @@ app.use((err, req, res, next) => {
 });
 
 //слухаємо порт 3000 або зі змінної з сервера render, куди ми задеплоїдили
-const PORT = process.env.PORT || 3000;
+//const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(3000, () => {
   console.log("Server is running. Use our API on port: 3000");
 });
