@@ -7,9 +7,10 @@ import "dotenv/config";
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const authenticate = async (req, res, next) => {
-  const { authorisation = "" } = req.headers;
-  const [bearer, token] = authorisation.split("");
-  console.log(SECRET_KEY);
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split("");
+
+  console.log({ bearer, token });
 
   if (bearer !== "Bearer") {
     next(HttpError(401));
