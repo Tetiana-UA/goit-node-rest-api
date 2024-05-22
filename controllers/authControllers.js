@@ -82,7 +82,7 @@ export async function login(req, res, next) {
 }
 
 //current
-export async function login(req, res, next) {
+export async function current(req, res, next) {
   try {
     const { email } = req.user;
     res.json({
