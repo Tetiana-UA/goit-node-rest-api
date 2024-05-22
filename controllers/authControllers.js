@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import User from "../models/user.js";
 import {
@@ -8,8 +9,10 @@ import {
 
 import HttpError from "../helpers/HttpError.js";
 
+const SECRET_KEY = process.env.SECRET_KEY;
+
 //регістрація
-async function registration(req, res, next) {
+export async function registration(req, res, next) {
   const { email, password } = req.body;
 
   const emailInLowerCase = email.toLowerCase();
@@ -42,7 +45,7 @@ async function registration(req, res, next) {
 }
 
 //логін
-async function login(req, res, next) {
+export async function login(req, res, next) {
   const { email, password } = req.body;
 
   const emailInLowerCase = email.toLowerCase();
@@ -66,13 +69,36 @@ async function login(req, res, next) {
       return res.status(401).send({ message: "Email or password is wrong" });
     }
 
-    res.status(200).send({ message: "Login successfully" });
+    //створюємо токен
+    const payload = {
+      id: user._id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+    res.send({ token });
   } catch (error) {
     next(error);
   }
 }
 
-export default {
-  registration,
-  login,
-};
+//current
+export async function login(req, res, next) {
+  try {
+    const { email } = req.user;
+    res.json({
+      email,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+//розлогування
+export async function logout(req, res, next) {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { token: null });
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+}
