@@ -69,11 +69,13 @@ export async function login(req, res, next) {
       return res.status(401).send({ message: "Email or password is wrong" });
     }
 
-    //створюємо токен
+    //створюємо токен і перезаписуємо його в базу
     const payload = {
       id: user._id,
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+    await User.findByIdAndUpdate(user._id, {token});
 
     res.send({ token });
   } catch (error) {
