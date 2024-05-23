@@ -6,7 +6,9 @@ import {
   logout,
   current,
 } from "../controllers/authControllers.js";
+
 import authMiddleware from "../middlewares/authenticate.js";
+import uploadMiddleware from "../middlewares/upload.js";
 
 const authRouter = express.Router();
 
@@ -14,5 +16,6 @@ authRouter.post("/register", registration);
 authRouter.post("/login", login);
 authRouter.get("/current", authMiddleware, current);
 authRouter.post("/logout", authMiddleware, logout);
+authRouter.patch("/avatars", uploadMiddleware);
 
 export default authRouter;
