@@ -47,6 +47,7 @@ export async function registration(req, res, next) {
 //логін
 export async function login(req, res, next) {
   const { email, password } = req.body;
+  console.log(req.body);
 
   const emailInLowerCase = email.toLowerCase();
 
@@ -75,7 +76,7 @@ export async function login(req, res, next) {
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
-    await User.findByIdAndUpdate(user._id, {token});
+    await User.findByIdAndUpdate(user._id, { token });
 
     res.send({ token });
   } catch (error) {
