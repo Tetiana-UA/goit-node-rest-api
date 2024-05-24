@@ -24,6 +24,5 @@ authRouter.patch(
   uploadMiddleware.single("avatar"),
   uploadAvatar
 );
-authRouter.get("/avatar", authMiddleware, getAvatar);
 
 export default authRouter;

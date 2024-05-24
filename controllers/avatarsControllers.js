@@ -4,24 +4,6 @@ import Jimp from "jimp";
 
 import User from "../models/user.js";
 
-export async function getAvatar(req, res, next) {
-  try {
-    const user = await User.findById(req.user.id);
-
-    if (user === null) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
-    if (user.avatar === null) {
-      return res.status(404).send({ message: "Avatar not found" });
-    }
-
-    res.sendFile(path.resolve("public/avatars", user.avatar));
-  } catch (error) {
-    next(error);
-  }
-}
-
 export async function uploadAvatar(req, res, next) {
   //перевірка, чи файл існує
   try {
@@ -30,9 +12,9 @@ export async function uploadAvatar(req, res, next) {
     }
 
     //використаємо jimp для зміни розмірів аватарки
-    const userAvatar = await Jimp.read(req.file.path);
+    const avatarURL = await Jimp.read(req.file.path);
     console.log(req.file.path);
-    await userAvatar.cover(250, 250).writeAsync(req.file.path);
+    await avatarURL.cover(250, 250).writeAsync(req.file.path);
 
     await fs.rename(
       req.file.path,
@@ -45,15 +27,13 @@ export async function uploadAvatar(req, res, next) {
       { new: true }
     );
 
-    console.log(req.user);
-    console.log({ avatarURL });
-
     if (user === null) {
       return res.status(404).send({ message: "User not found" });
     }
 
     res.send({ avatarURL });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
