@@ -7,6 +7,8 @@ import {
   current,
 } from "../controllers/authControllers.js";
 
+import { getAvatar, uploadAvatar } from "../controllers/avatarsControllers.js";
+
 import authMiddleware from "../middlewares/authenticate.js";
 import uploadMiddleware from "../middlewares/upload.js";
 
@@ -16,6 +18,7 @@ authRouter.post("/register", registration);
 authRouter.post("/login", login);
 authRouter.get("/current", authMiddleware, current);
 authRouter.post("/logout", authMiddleware, logout);
-authRouter.patch("/avatars", uploadMiddleware);
+authRouter.patch("/avatar", uploadMiddleware, uploadAvatar);
+authRouter.get("/avatar", getAvatar);
 
 export default authRouter;
