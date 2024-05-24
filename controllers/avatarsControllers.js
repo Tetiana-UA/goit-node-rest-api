@@ -28,6 +28,8 @@ export async function uploadAvatar(req, res, next) {
       path.resolve("public/avatars", req.file.filename)
     );
 
+    console.log(req.user.id);
+
     const user = await User.findByIdAndUpdate(
       req.user.id,
       { avatar: req.file.filename },
