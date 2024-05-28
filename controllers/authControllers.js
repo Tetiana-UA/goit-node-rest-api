@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import gravatar from "gravatar";
+import crypto from "node:crypto";
 
 import User from "../models/user.js";
 import {
   registerUserSchema,
   loginUserSchema,
 } from "../schemas/usersSchemas.js";
-
 import HttpError from "../helpers/HttpError.js";
+import mail from "../mail.js";
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -34,11 +35,20 @@ export async function registration(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
+    const verifyToken = crypto.randomUUID();
 
     await User.create({
       email: emailInLowerCase,
       password: passwordHash,
       avatarURL,
+    });
+
+    mail.sendMail({
+      to: emailInLowerCase,
+      from: "izidaxm5a@gmail.com",
+      subject: "Welcome to ContactsBook!",
+      html: `To confirm your email please click on the <a href="http://localhost:3000/api/users/verify/${verifyToken}">link</a>`,
+      text: `To confirm your email please open the link http://localhost:3000/api/users/verify/${verifyToken}`,
     });
 
     res.status(201).send({ message: "Registration successfully" });

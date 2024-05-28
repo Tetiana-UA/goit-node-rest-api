@@ -1,3 +1,4 @@
+import { required } from "joi";
 import mongoose from "mongoose";
 
 //Створюємо mongoose схему-модель для кожного користувача
@@ -24,6 +25,14 @@ const userSchema = new mongoose.Schema(
     avatarURL: {
       type: String,
       required: false,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
