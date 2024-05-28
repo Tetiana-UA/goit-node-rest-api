@@ -13,7 +13,7 @@ import mail from "../mail.js";
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-//регістрація
+//регістрація користувача
 export async function registration(req, res, next) {
   const { email, password } = req.body;
 
@@ -41,8 +41,10 @@ export async function registration(req, res, next) {
       email: emailInLowerCase,
       password: passwordHash,
       avatarURL,
+      verifyToken,
     });
 
+    //відправка листа на підтвердження email користувача по посиланні у листі
     mail.sendMail({
       to: emailInLowerCase,
       from: "izidaxm5a@gmail.com",
@@ -57,7 +59,7 @@ export async function registration(req, res, next) {
   }
 }
 
-//логін
+//логін користувача (пошук в базі за поштою і паролем)
 export async function login(req, res, next) {
   const { email, password } = req.body;
   console.log(req.body);
@@ -81,6 +83,11 @@ export async function login(req, res, next) {
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch === false) {
       return res.status(401).send({ message: "Email or password is wrong" });
+    }
+
+    //перевірка, чи користувач вже підтвердив сій email
+    if (user.verify === false) {
+      return res.status(401).send({ message: "Please verify your email" });
     }
 
     //створюємо токен і перезаписуємо його в базу
@@ -109,7 +116,7 @@ export async function current(req, res, next) {
   }
 }
 
-//розлогування
+//розлогування користувача
 export async function logout(req, res, next) {
   try {
     await User.findByIdAndUpdate(req.user.id, { token: null });

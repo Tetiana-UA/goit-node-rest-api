@@ -1,4 +1,3 @@
-import { required } from "joi";
 import mongoose from "mongoose";
 
 //Створюємо mongoose схему-модель для кожного користувача
