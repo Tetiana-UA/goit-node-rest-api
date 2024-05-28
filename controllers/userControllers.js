@@ -63,8 +63,8 @@ export async function verifyEmail(req, res, next) {
 
 // повторна відправка листа на підтвердження пошти користувача по посиланні у листі
 export async function resendVerifyEmail(req, res, next) {
-  const { email } = req.params;
-  console.log(req.params);
+  const { email } = req.body;
+  console.log(req.body);
 
   try {
     //валідація тіла запиту(email) за допомогою Joi
